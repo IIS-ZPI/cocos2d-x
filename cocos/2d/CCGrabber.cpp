@@ -66,6 +66,24 @@ void Grabber::beforeRender(Texture2D *texture)
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_oldFBO);
     glBindFramebuffer(GL_FRAMEBUFFER, _FBO);
     
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_oldFBO);
+    
+    // bind
+    glBindFramebuffer(GL_FRAMEBUFFER, _FBO);
+    
+    // associate texture with FBO
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->getName(), 0);
+    
+    // check if it worked (probably worth doing :) )
+    GLuint status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status != GL_FRAMEBUFFER_COMPLETE)
+    {
+        CCASSERT(0, "Frame Grabber: could not attach texture to framebuffer");
+    }
+    
+
+    
+    
     // save clear color
     glGetFloatv(GL_COLOR_CLEAR_VALUE, _oldClearColor);
     // FIXME: doesn't work with RGB565.
